@@ -371,7 +371,6 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
             "error",
         )
     else:
-
         for filesystem_id in cols_selected:
             delete_source_files(filesystem_id)
 
@@ -526,8 +525,13 @@ def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
 
 def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     file_path = Storage.get_default().path(db_obj.source.filesystem_id, db_obj.filename)
+    add_range_headers = not current_app.config["USE_X_SENDFILE"]
     response = send_file(
-        file_path, mimetype="application/pgp-encrypted", as_attachment=True, etag=False
+        file_path,
+        mimetype="application/pgp-encrypted",
+        as_attachment=True,
+        etag=False,
+        conditional=add_range_headers,
     )  # Disable Flask default ETag
 
     if not db_obj.checksum:
@@ -535,4 +539,5 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
 
     response.direct_passthrough = False
     response.headers["Etag"] = db_obj.checksum
+    response.headers["Accept-Ranges"] = "bytes"
     return response

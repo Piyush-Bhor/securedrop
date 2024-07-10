@@ -5,6 +5,7 @@ Loads test data into the SecureDrop database.
 """
 
 import argparse
+import calendar
 import datetime
 import io
 import math
@@ -83,10 +84,17 @@ def random_datetime(nullable: bool) -> Optional[datetime.datetime]:
         return None
 
     now = datetime.datetime.now()
+    year = random.randint(2013, now.year)
+    max_day = 366 if calendar.isleap(year) else 365
+    day = random.randint(1, max_day)
+
+    # Calculate the month/day given the year
+    date = datetime.date(year, 1, 1) + datetime.timedelta(days=day - 1)
+
     return datetime.datetime(
-        year=random.randint(2013, now.year),
-        month=random.randint(1, now.month),
-        day=random.randint(1, now.day),
+        year=year,
+        month=date.month,
+        day=date.day,
         hour=random.randint(0, 23),
         minute=random.randint(0, 59),
         second=random.randint(0, 59),
@@ -192,18 +200,24 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
         db.session.add(seen_message)
 
 
-def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> None:
+def submit_file(source: Source, journalist_who_saw: Optional[Journalist], size: int = 0) -> None:
     """
     Adds a single file submitted by a source.
     """
     record_source_interaction(source)
+    if not size:
+        file_bytes = b"This is an example of a plain text file upload"
+    else:
+        file_bytes = os.urandom(size * 1024)
+
     fpath = Storage.get_default().save_file_submission(
         source.filesystem_id,
         source.interaction_count,
         source.journalist_filename,
         "memo.txt",
-        io.BytesIO(b"This is an example of a plain text file upload."),
+        io.BytesIO(file_bytes),
     )
+
     submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
@@ -350,7 +364,11 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
             seen_message_count -= 1
 
         for _ in range(args.files_per_source):
-            submit_file(source, secrets.choice(journalists) if seen_file_count > 0 else None)
+            submit_file(
+                source,
+                secrets.choice(journalists) if seen_file_count > 0 else None,
+                args.random_file_size,
+            )
             seen_file_count -= 1
 
         if i <= starred_sources_count:
@@ -476,6 +494,13 @@ def parse_arguments() -> argparse.Namespace:
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "--random-file-size",
+        help="Create random submission files with size specified (in KB)",
+        type=non_negative_int,
+        default=0,
+    )
+
     return parser.parse_args()
 
 
