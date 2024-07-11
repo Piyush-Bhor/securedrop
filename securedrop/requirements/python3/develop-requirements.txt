@@ -1136,3 +1136,4 @@ setuptools==56.0.0 \
     #   safety
     #   selinux
     #   yamllint
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
