@@ -257,7 +257,7 @@ cookiecutter==2.6.0 \
     --hash=sha256:a54a8e37995e4ed963b3e82831072d1ad4b005af736bb17b99c2cbd9d41b6e2d \
     --hash=sha256:db21f8169ea4f4fdc2408d48ca44859349de2647fbe494a9d6c3edfc0542c21c
     # via molecule
-cryptography==41.0.7 \
+cryptography==43.0.1 \
     --hash=sha256:079b85658ea2f59c4f43b70f8119a52414cdb7be34da5d019a77bf96d473b960 \
     --hash=sha256:09616eeaef406f99046553b8a40fbf8b1e70795a91885ba4c96a70793de5504a \
     --hash=sha256:13f93ce9bea8016c253b34afc6bd6a75993e5c40672ed5405a9c832f0d4a00bc \
@@ -350,7 +350,7 @@ identify==2.5.35 \
     --hash=sha256:10a7ca245cfcd756a554a7288159f72ff105ad233c7c4b9c6f0f4d108f5f6791 \
     --hash=sha256:c4de0081837b211594f8e877a6b4fad7ca32bbfc1a9307fdd61c28bfe923f13e
     # via pre-commit
-idna==2.5 \
+idna==3.7 \
     --hash=sha256:3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab \
     --hash=sha256:cc19709fd6d0cbfed39ea875d29ba6d4e22c0cebc510a76d6302a28385e8bb70
     # via requests
@@ -803,7 +803,7 @@ referencing==0.32.1 \
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.31.0 \
+requests==2.32.2 \
     --hash=sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f \
     --hash=sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1
     # via
@@ -1127,7 +1127,7 @@ pip==21.3 \
     # via
     #   -r requirements/python3/develop-requirements.in
     #   pip-tools
-setuptools==56.0.0 \
+setuptools==70.0.0 \
     --hash=sha256:08a1c0f99455307c48690f00d5c2ac2c1ccfab04df00454fef854ec145b81302 \
     --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
     # via
@@ -1136,3 +1136,4 @@ setuptools==56.0.0 \
     #   safety
     #   selinux
     #   yamllint
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
