@@ -274,7 +274,7 @@ sqlalchemy==1.3.3 \
     #   -r requirements/python3/requirements.in
     #   alembic
     #   flask-sqlalchemy
-werkzeug==2.2.3 \
+werkzeug==3.0.3 \
     --hash=sha256:2e1ccc9417d4da358b9de6f174e3ac094391ea1d4fbef2d667865d819dfd0afe \
     --hash=sha256:56433961bc1f12533306c624f3be5e744389ac61d722175d543e1751285da612
     # via
